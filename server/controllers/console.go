@@ -7,16 +7,15 @@ import (
 	"net/http"
 )
 
-type ConsoleWithManufacturer struct {
-	models.Console
-	Manufacturer string `json:"manufacturer"`
-}
-
-
 func ListConsoles(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("/console/list")
 	consoles := models.SelectAllConsoles()
+
+	type ConsoleWithManufacturer struct {
+		models.Console
+		Manufacturer string `json:"manufacturer"`
+	}
 
 	consolesWithManufacturers := make([]ConsoleWithManufacturer, 0)
 	for _, c := range consoles {
