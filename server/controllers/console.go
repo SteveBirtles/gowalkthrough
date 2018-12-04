@@ -4,6 +4,7 @@ import (
 	"../../server/models"
 	"encoding/json"
 	"fmt"
+	"gowalkthrough/server/utils"
 	"net/http"
 )
 
@@ -33,6 +34,20 @@ func ListConsoles(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetConsole(w http.ResponseWriter, r *http.Request) {
+
+	id := utils.PathTail(r.URL.Path)
+
+	fmt.Println("/console/get/", id)
+
+	console := models.SelectConsole(id)
+
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(console)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Println("Error:", err)
+	}
 
 }
 

@@ -3,8 +3,8 @@ package models
 import "fmt"
 
 type Manufacturer struct {
-	ManufacturerId int `json:"manufacturerId"`
-	Name string `json:"name"`
+	ManufacturerId int    `json:"manufacturerId"`
+	Name           string `json:"name"`
 }
 
 func SelectAllManufacturers() []Manufacturer {
@@ -29,9 +29,9 @@ func SelectAllManufacturers() []Manufacturer {
 
 func SelectManufacturer(manufacturerId int) Manufacturer {
 	var m Manufacturer
-	rows, err := database.Query(fmt.Sprintf("select ManufacturerId, Name from Manufacturers where ManufacturerId = %d", manufacturerId))
+	rows, err := database.Query("select ManufacturerId, Name from Manufacturers where ManufacturerId = ?", manufacturerId)
 	if err != nil {
-		fmt.Println("Database select all error:", err)
+		fmt.Println("Database select error:", err)
 		return m
 	}
 	defer rows.Close()
@@ -44,23 +44,23 @@ func SelectManufacturer(manufacturerId int) Manufacturer {
 }
 
 func InsertManufacturer(m Manufacturer) {
-	_, err := database.Exec(fmt.Sprintf("insert into Manufacturers (ManufacturerId, Name) values (%d, '%s')",
-		m.ManufacturerId, m.Name))
+	_, err := database.Exec("insert into Manufacturers (ManufacturerId, Name) values (?, '?')",
+		m.ManufacturerId, m.Name)
 	if err != nil {
 		fmt.Println("Database insert error:", err)
 	}
 }
 
 func UpdateManufacturer(m Manufacturer) {
-	_, err := database.Exec(fmt.Sprintf("update Manufacturers set Name = '%s' where ManufacturerId = %d",
-		m.Name, m.ManufacturerId))
+	_, err := database.Exec("update Manufacturers set Name = '?' where ManufacturerId = ?",
+		m.Name, m.ManufacturerId)
 	if err != nil {
 		fmt.Println("Database update error:", err)
 	}
 }
 
 func DeleteManufacturer(manufacturerId int) {
-	_, err := database.Exec(fmt.Sprintf("delete from Messages where ManufacturerId = %d", manufacturerId))
+	_, err := database.Exec("delete from Messages where ManufacturerId = ?", manufacturerId)
 	if err != nil {
 		fmt.Println("Database delete error:", err)
 	}
