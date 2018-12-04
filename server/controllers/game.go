@@ -3,16 +3,16 @@ package controllers
 import (
 	"../../server/models"
 	"../../server/utils"
-	"net/http"
-	"fmt"
 	"encoding/json"
+	"fmt"
+	"net/http"
 )
 
 func ListGames(w http.ResponseWriter, r *http.Request) {
 
 	type GamesWithConsole struct {
-		ConsoleName string `json:"consoleName"`
-		Games []models.Game `json:"gamesList"`
+		ConsoleName string        `json:"consoleName"`
+		Games       []models.Game `json:"gamesList"`
 	}
 
 	fmt.Println("/game/list")
@@ -36,5 +36,17 @@ func ListGames(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println("Error:", err)
 	}
+
+}
+
+func GetGame(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func SaveGame(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func DeleteGame(w http.ResponseWriter, r *http.Request) {
 
 }

@@ -31,3 +31,15 @@ func ListConsoles(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+func GetConsole(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func SaveConsole(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func DeleteConsole(w http.ResponseWriter, r *http.Request) {
+
+}
