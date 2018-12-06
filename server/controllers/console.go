@@ -20,6 +20,9 @@ func ListConsoles(w http.ResponseWriter, r *http.Request) {
 
 	consolesWithManufacturers := make([]ConsoleWithManufacturer, 0)
 	for _, c := range consoles {
+		if c.ImageURL == "" {
+			c.ImageURL = "/client/img/none.png"
+		}
 		manufacturer := models.SelectManufacturer(c.ManufacturerId)
 		consolesWithManufacturers = append(consolesWithManufacturers, ConsoleWithManufacturer{c, manufacturer.Name})
 	}

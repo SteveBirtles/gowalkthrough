@@ -29,6 +29,9 @@ func ListGames(w http.ResponseWriter, r *http.Request) {
 	relevantGames := make([]models.Game, 0)
 	for _, g := range allGames {
 		if g.ConsoleId == consoleId {
+			if g.ImageURL == "" {
+				g.ImageURL = "/client/img/none.png"
+			}
 			relevantGames = append(relevantGames, g)
 		}
 	}

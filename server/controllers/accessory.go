@@ -27,9 +27,12 @@ func ListAccessories(w http.ResponseWriter, r *http.Request) {
 
 	allAccessories := models.SelectAllAccessorys()
 	relevantAccessories := make([]models.Accessory, 0)
-	for _, g := range allAccessories {
-		if g.ConsoleId == consoleId {
-			relevantAccessories = append(relevantAccessories, g)
+	for _, a := range allAccessories {
+		if a.ConsoleId == consoleId {
+			if a.ImageURL == "" {
+				a.ImageURL = "/client/img/none.png"
+			}
+			relevantAccessories = append(relevantAccessories, a)
 		}
 	}
 
