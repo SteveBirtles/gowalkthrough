@@ -3,8 +3,8 @@ package models
 import "fmt"
 
 type Category struct {
-	CategoryId int    `json:"id"`
-	Name       string `json:"name"`
+	CategoryId int `json:"categoryId"`
+	Name string `json:"name"`
 }
 
 func SelectAllCategorys() []Category {
@@ -44,23 +44,24 @@ func SelectCategory(categoryId int) Category {
 }
 
 func InsertCategory(c Category) {
-	_, err := database.Exec("insert into Categories (CategoryId, Name) values (?, '?')",
-		c.CategoryId, c.Name)
+	statement, err := database.Prepare("insert into Categories (CategoryId, Name) values (?, ?)")
+	if err == nil { _, err = statement.Exec(c.CategoryId, c.Name) }
 	if err != nil {
 		fmt.Println("Database insert error:", err)
 	}
 }
 
 func UpdateCategory(c Category) {
-	_, err := database.Exec("update Categories set Name = '?' where CategoryId = ?",
-		c.Name, c.CategoryId)
+	statement, err := database.Prepare("update Categories set Name = ? where CategoryId = ?")
+	if err == nil { _, err = statement.Exec(c.Name, c.CategoryId) }
 	if err != nil {
 		fmt.Println("Database update error:", err)
 	}
 }
 
 func DeleteCategory(categoryId int) {
-	_, err := database.Exec("delete from Messages where CategoryId = ?", categoryId)
+	statement, err := database.Prepare("delete from Categories where CategoryId = ?")
+	if err == nil { _, err = statement.Exec(categoryId) }
 	if err != nil {
 		fmt.Println("Database delete error:", err)
 	}

@@ -11,6 +11,11 @@ import (
 
 func ListGames(w http.ResponseWriter, r *http.Request) {
 
+	if r.Method != "GET" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
 	type GamesWithConsole struct {
 		ConsoleName string        `json:"consoleName"`
 		Games       []models.Game `json:"gamesList"`
@@ -42,6 +47,11 @@ func ListGames(w http.ResponseWriter, r *http.Request) {
 
 func GetGame(w http.ResponseWriter, r *http.Request) {
 
+	if r.Method != "GET" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
 	id := utils.PathTail(r.URL.Path)
 
 	if id == -1 {
@@ -63,6 +73,11 @@ func GetGame(w http.ResponseWriter, r *http.Request) {
 }
 
 func SaveGame(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
 
 	var game models.Game
 
@@ -94,19 +109,43 @@ func SaveGame(w http.ResponseWriter, r *http.Request) {
 		game.GameId = lastId + 1
 
 		models.InsertGame(game)
-		fmt.Fprintf(w, "OK")
+		fmt.Fprint(w, "OK")
 
 	} else {
 
 		fmt.Println("Saving existing game...")
 
 		models.UpdateGame(game)
-		fmt.Fprintf(w, "OK")
+		fmt.Fprint(w, "OK")
 
 	}
 
 }
 
 func DeleteGame(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	id := utils.PathTail(r.URL.Path)
+
+	if id == -1 {
+		return
+	}
+
+	fmt.Println("/game/delete/", id)
+
+	allGames := models.SelectAllGames()
+	for _, g := range allGames {
+		if g.GameId == id {
+			models.DeleteGame(id)
+			fmt.Fprint(w, "OK")
+			return
+		}
+	}
+
+	fmt.Fprint(w, "Error: Can't find game with id", id)
 
 }

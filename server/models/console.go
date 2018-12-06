@@ -3,15 +3,15 @@ package models
 import "fmt"
 
 type Console struct {
-	ConsoleId      int    `json:"consoleId"`
-	Name           string `json:"name"`
-	ManufacturerId int    `json:"manufacturerId"`
-	MediaType      string `json:"mediaType"`
-	Year           string `json:"year"`
-	Sales          string `json:"sales"`
-	Handheld       bool   `json:"handheld"`
-	ImageURL       string `json:"imageURL"`
-	Notes          string `json:"notes"`
+	ConsoleId int `json:"consoleId"`
+	Name string `json:"name"`
+	ManufacturerId int `json:"manufacturerId"`
+	MediaType string `json:"mediaType"`
+	Year string `json:"year"`
+	Sales string `json:"sales"`
+	Handheld bool `json:"handheld"`
+	ImageURL string `json:"imageURL"`
+	Notes string `json:"notes"`
 }
 
 func SelectAllConsoles() []Console {
@@ -51,23 +51,24 @@ func SelectConsole(consoleId int) Console {
 }
 
 func InsertConsole(c Console) {
-	_, err := database.Exec("insert into Consoles (ConsoleId, Name, ManufacturerId, MediaType, Year, Sales, Handheld, ImageURL, Notes) values (?, '?', ?, '?', '?', '?', ?, '?', '?')",
-		c.ConsoleId, c.Name, c.ManufacturerId, c.MediaType, c.Year, c.Sales, c.Handheld, c.ImageURL, c.Notes)
+	statement, err := database.Prepare("insert into Consoles (ConsoleId, Name, ManufacturerId, MediaType, Year, Sales, Handheld, ImageURL, Notes) values (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	if err == nil { _, err = statement.Exec(c.ConsoleId, c.Name, c.ManufacturerId, c.MediaType, c.Year, c.Sales, c.Handheld, c.ImageURL, c.Notes) }
 	if err != nil {
 		fmt.Println("Database insert error:", err)
 	}
 }
 
 func UpdateConsole(c Console) {
-	_, err := database.Exec("update Consoles set Name = '?', ManufacturerId = ?, MediaType = '?', Year = '?', Sales = '?', Handheld = ?, ImageURL = '?', Notes = '?' where ConsoleId = ?",
-		c.Name, c.ManufacturerId, c.MediaType, c.Year, c.Sales, c.Handheld, c.ImageURL, c.Notes, c.ConsoleId)
+	statement, err := database.Prepare("update Consoles set Name = ?, ManufacturerId = ?, MediaType = ?, Year = ?, Sales = ?, Handheld = ?, ImageURL = ?, Notes = ? where ConsoleId = ?")
+	if err == nil { _, err = statement.Exec(c.Name, c.ManufacturerId, c.MediaType, c.Year, c.Sales, c.Handheld, c.ImageURL, c.Notes, c.ConsoleId) }
 	if err != nil {
 		fmt.Println("Database update error:", err)
 	}
 }
 
 func DeleteConsole(consoleId int) {
-	_, err := database.Exec("delete from Messages where ConsoleId = ?", consoleId)
+	statement, err := database.Prepare("delete from Consoles where ConsoleId = ?")
+	if err == nil { _, err = statement.Exec(consoleId) }
 	if err != nil {
 		fmt.Println("Database delete error:", err)
 	}

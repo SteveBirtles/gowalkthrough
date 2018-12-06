@@ -3,8 +3,8 @@ package models
 import "fmt"
 
 type Admin struct {
-	Username     string `json:"username"`
-	Password     string `json:"password"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 	SessionToken string `json:"sessionToken"`
 }
 
@@ -30,7 +30,7 @@ func SelectAllAdmins() []Admin {
 
 func SelectAdmin(username string) Admin {
 	var a Admin
-	rows, err := database.Query("select Username, Password, SessionToken from Admins where Username = '?'", username)
+	rows, err := database.Query("select Username, Password, SessionToken from Admins where Username = ?", username)
 	if err != nil {
 		fmt.Println("Database select error:", err)
 		return a
@@ -45,23 +45,24 @@ func SelectAdmin(username string) Admin {
 }
 
 func InsertAdmin(a Admin) {
-	_, err := database.Exec("insert into Admins (Username, Password, SessionToken) values ('?', '?', '?')",
-		a.Username, a.Password, a.SessionToken)
+	statement, err := database.Prepare("insert into Admins (Username, Password, SessionToken) values (?, ?, ?)")
+	if err == nil { _, err = statement.Exec(a.Username, a.Password, a.SessionToken) }
 	if err != nil {
 		fmt.Println("Database insert error:", err)
 	}
 }
 
 func UpdateAdmin(a Admin) {
-	_, err := database.Exec("update Admins set Password = '?', SessionToken = '?' where Username = '?'",
-		a.Password, a.SessionToken, a.Username)
+	statement, err := database.Prepare("update Admins set Password = ?, SessionToken = ? where Username = ?")
+	if err == nil { _, err = statement.Exec(a.Password, a.SessionToken, a.Username) }
 	if err != nil {
 		fmt.Println("Database update error:", err)
 	}
 }
 
 func DeleteAdmin(username string) {
-	_, err := database.Exec("delete from Messages where Username = '?'", username)
+	statement, err := database.Prepare("delete from Admins where Username = ?")
+	if err == nil { _, err = statement.Exec(username) }
 	if err != nil {
 		fmt.Println("Database delete error:", err)
 	}

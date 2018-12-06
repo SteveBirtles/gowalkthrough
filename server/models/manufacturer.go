@@ -3,8 +3,8 @@ package models
 import "fmt"
 
 type Manufacturer struct {
-	ManufacturerId int    `json:"manufacturerId"`
-	Name           string `json:"name"`
+	ManufacturerId int `json:"manufacturerId"`
+	Name string `json:"name"`
 }
 
 func SelectAllManufacturers() []Manufacturer {
@@ -44,23 +44,24 @@ func SelectManufacturer(manufacturerId int) Manufacturer {
 }
 
 func InsertManufacturer(m Manufacturer) {
-	_, err := database.Exec("insert into Manufacturers (ManufacturerId, Name) values (?, '?')",
-		m.ManufacturerId, m.Name)
+	statement, err := database.Prepare("insert into Manufacturers (ManufacturerId, Name) values (?, ?)")
+	if err == nil { _, err = statement.Exec(m.ManufacturerId, m.Name) }
 	if err != nil {
 		fmt.Println("Database insert error:", err)
 	}
 }
 
 func UpdateManufacturer(m Manufacturer) {
-	_, err := database.Exec("update Manufacturers set Name = '?' where ManufacturerId = ?",
-		m.Name, m.ManufacturerId)
+	statement, err := database.Prepare("update Manufacturers set Name = ? where ManufacturerId = ?")
+	if err == nil { _, err = statement.Exec(m.Name, m.ManufacturerId) }
 	if err != nil {
 		fmt.Println("Database update error:", err)
 	}
 }
 
 func DeleteManufacturer(manufacturerId int) {
-	_, err := database.Exec("delete from Messages where ManufacturerId = ?", manufacturerId)
+	statement, err := database.Prepare("delete from Manufacturers where ManufacturerId = ?")
+	if err == nil { _, err = statement.Exec(manufacturerId) }
 	if err != nil {
 		fmt.Println("Database delete error:", err)
 	}
