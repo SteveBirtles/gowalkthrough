@@ -20,7 +20,7 @@ function pageLoad() {
         id = parseInt(params['id']);
     }
 
-    if (id !== '-1') {
+    if (id !== -1) {
         loadAccessory();
         resetDeleteButton();
     } else {

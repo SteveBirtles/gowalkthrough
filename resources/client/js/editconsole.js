@@ -17,7 +17,7 @@ function pageLoad() {
 
     let params = getQueryStringParameters();
     if (params['id'] !== undefined) {
-        id = params['id'];
+        id = parseInt(params['id']);
     }
 
     if (id !== -1) {
