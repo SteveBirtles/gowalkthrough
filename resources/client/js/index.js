@@ -29,9 +29,9 @@ function updateConsoleList() {
                                     + `<div class="col-2"><a href="${console.imageURL}" target=”_blank”><img width="120" height="90" src="${console.imageURL}"></a></div>`
                                     + `<div class="col-1 small">${console.mediaType}</div>`
                                     + `<div class="col-3 text-right">`
-                                        + `<a class="btn btn-sm btn-info mr-2"  href="/client/games.html?id=${console.consoleId}">Games</a>`
-                                        + `<a class="btn btn-sm btn-info mr-2"  href="/client/accessories.html?id=${console.consoleId}">Accessories</a>`
-                                        + `<a class="btn btn-sm btn-success"  href="/client/editconsole.html?id=${console.consoleId}">Edit</a>`
+                                        + `<a class="btn btn-sm btn-info mr-2"  href="/client/games.html?id=${console.id}">Games</a>`
+                                        + `<a class="btn btn-sm btn-info mr-2"  href="/client/accessories.html?id=${console.id}">Accessories</a>`
+                                        + `<a class="btn btn-sm btn-success"  href="/client/editconsole.html?id=${console.id}">Edit</a>`
                                     +`</div>`
                                  + `</div>`;
                 }

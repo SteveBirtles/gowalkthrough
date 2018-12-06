@@ -3,7 +3,7 @@ package models
 import "fmt"
 
 type Console struct {
-	ConsoleId int `json:"consoleId"`
+	ConsoleId int `json:"id"`
 	Name string `json:"name"`
 	ManufacturerId int `json:"manufacturerId"`
 	MediaType string `json:"mediaType"`
