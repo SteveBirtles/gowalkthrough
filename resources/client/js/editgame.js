@@ -35,8 +35,6 @@ function pageLoad() {
 
 function loadGame() {
 
-    console.log("Loading game " + id);
-
     $.ajax({
         url: '/game/get/' + id,
         type: 'GET',
