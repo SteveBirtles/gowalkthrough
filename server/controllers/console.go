@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"../../server/models"
+	"../../server/utils"
 	"encoding/json"
 	"fmt"
-	"gowalkthrough/server/utils"
 	"net/http"
 )
 
