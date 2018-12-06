@@ -3,7 +3,7 @@ package models
 import "fmt"
 
 type Game struct {
-	GameId    int    `json:"gameId"`
+	GameId    int    `json:"id"`
 	ConsoleId int    `json:"consoleId"`
 	Name      string `json:"name"`
 	Sales     string `json:"sales"`
@@ -48,23 +48,24 @@ func SelectGame(gameId int) Game {
 }
 
 func InsertGame(g Game) {
-	_, err := database.Exec("insert into Games (GameId, ConsoleId, Name, Sales, Year, ImageURL) values (?, ?, '?', '?', '?', '?')",
-		g.GameId, g.ConsoleId, g.Name, g.Sales, g.Year, g.ImageURL)
+	statement, _ := database.Prepare("insert into Games (GameId, ConsoleId, Name, Sales, Year, ImageURL) values (?, ?, ?, ?, ?, ?)")
+	_, err := statement.Exec(g.GameId, g.ConsoleId, g.Name, g.Sales, g.Year, g.ImageURL)
 	if err != nil {
 		fmt.Println("Database insert error:", err)
 	}
 }
 
 func UpdateGame(g Game) {
-	_, err := database.Exec("update Games set ConsoleId = ?, Name = '?', Sales = '?', Year = '?', ImageURL = '?' where GameId = ?",
-		g.ConsoleId, g.Name, g.Sales, g.Year, g.ImageURL, g.GameId)
+	statement, _ := database.Prepare("update Games set ConsoleId = ?, Name = ?, Sales = ?, Year = ?, ImageURL = ? where GameId = ?")
+	_, err := statement.Exec(g.ConsoleId, g.Name, g.Sales, g.Year, g.ImageURL, g.GameId)
 	if err != nil {
 		fmt.Println("Database update error:", err)
 	}
 }
 
 func DeleteGame(gameId int) {
-	_, err := database.Exec("delete from Messages where GameId = ?", gameId)
+	statement, _ := database.Prepare("delete from Messages where GameId = ?")
+	_, err := statement.Exec(gameId)
 	if err != nil {
 		fmt.Println("Database delete error:", err)
 	}

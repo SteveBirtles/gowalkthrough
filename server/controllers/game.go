@@ -66,27 +66,23 @@ func SaveGame(w http.ResponseWriter, r *http.Request) {
 
 	var game models.Game
 
-	id := utils.PathTail(r.URL.Path)
+	game.GameId = utils.PathTail(r.URL.Path)
 
-	if id != -1 {
-		game = models.SelectGame(id)
+	if game.GameId != -1 {
+		game = models.SelectGame(game.GameId)
 	}
 
-	consoleId, _ := strconv.Atoi(r.FormValue("consoleId"))
-	name := r.FormValue("name")
-	sales := r.FormValue("sales")
-	year := r.FormValue("year")
-	imageURL := r.FormValue("imageURL")
+	game.ConsoleId, _ = strconv.Atoi(r.FormValue("consoleId"))
+	game.Name = r.FormValue("name")
+	game.Sales = r.FormValue("sales")
+	game.Year = r.FormValue("year")
+	game.ImageURL = r.FormValue("imageURL")
 
-	fmt.Println("/game/save/", id, consoleId, "(", r.FormValue("consoleId"), ")", name, sales, year, imageURL)
+	fmt.Println("/game/save/", game)
 
-	game.ConsoleId = consoleId
-	game.Name = name
-	game.Sales = sales
-	game.Year = year
-	game.ImageURL = imageURL
+	if game.GameId == -1 {
 
-	if game.GameId == 0 {
+		fmt.Println("Saving new game...")
 
 		lastId := 0
 		allGames := models.SelectAllGames()
@@ -98,12 +94,14 @@ func SaveGame(w http.ResponseWriter, r *http.Request) {
 		game.GameId = lastId + 1
 
 		models.InsertGame(game)
-		_, _ = fmt.Fprint(w, "OK")
+		fmt.Fprintf(w, "OK")
 
 	} else {
 
+		fmt.Println("Saving existing game...")
+
 		models.UpdateGame(game)
-		_, _ = fmt.Fprint(w, "OK")
+		fmt.Fprintf(w, "OK")
 
 	}
 

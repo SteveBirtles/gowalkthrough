@@ -20,7 +20,7 @@ function pageLoad() {
         id = parseInt(params['id']);
     }
 
-    if (id !== '-1') {
+    if (id != -1) {
         loadGame();
         resetDeleteButton();
     } else {
@@ -34,6 +34,8 @@ function pageLoad() {
 }
 
 function loadGame() {
+
+    console.log("Loading game " + id);
 
     $.ajax({
         url: '/game/get/' + id,
